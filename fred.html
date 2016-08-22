@@ -1,0 +1,369 @@
+<!DOCTYPE>
+<html>
+<head>
+    <meta charset="UTF-8"></meta>
+            <meta http-equiv="X-UA-Compatible" content="IE=edge"></meta>
+            <meta name="viewport" content="width=device-width, initial-scale=1"></meta>
+            <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+
+
+    <title>HTML Events on 3D objects</title>
+      <script src="x3dom-full.js"></script>
+    <link rel='stylesheet' type='text/css' href='x3dom.css'/>
+ 	<link rel='stylesheet' type='text/css' href='css/bootstrap.css'/>
+    
+     <script type="text/javascript" src="jquery-2.1.0.min.js" ></script>
+	<script type="text/javascript" src="js/bootstrap.js"></script>
+    
+   
+    <script>
+        //Round a float value to x.xx format
+        function roundWithTwoDecimals(value)
+        {
+            return (Math.round(value * 100)) / 100;
+        }
+    
+        //Handle click on any group member
+        function handleGroupClick(event)
+        {
+            //Mark hitting point
+            $('#marker').attr('translation', event.hitPnt);
+            console.log(event);
+            
+            //Display coordinates of hitting point (rounded)
+            var coordinates = event.hitPnt;
+            $('#coordX').html(roundWithTwoDecimals(coordinates[0]));
+            $('#coordY').html(roundWithTwoDecimals(coordinates[1]));
+            $('#coordZ').html(roundWithTwoDecimals(coordinates[2]));
+               
+                
+
+        }
+        
+        //Handle click on a shape
+        function handleSingleClick(shape)
+        {
+                //Last clicked object descriptors
+                $('#id_description_line1').html($(shape).attr("def"));
+                $('#id_description_line2').html($(shape).attr("def1"));
+                $('#id_description_line3').html($(shape).attr("def2"));
+
+                //Second table (KPIs)
+                $("#id_table2_kpi1").html($(shape).attr("kpi1"));
+                $("#id_table2_kpi2").html($(shape).attr("kpi2"));
+                $("#id_table2_kpi3").html($(shape).attr("kpi3"));
+                $("#id_table2_kpi4").html($(shape).attr("kpi4"));
+        }
+        
+        $(document).ready(function(){
+            //Add a onclick callback to every shape
+            $("shape").each(function() {
+                $(this).attr("onclick", "handleSingleClick(this)");
+		//$(this).attr("onmouseover", "handleSingleClick(this)");
+            });
+        });
+
+/**
+	 * Change the selected object of the swichting node
+	 * 
+	 * @param nodeId number: New node id to set (starting from 0, or -1 to hide all of them)
+	 */
+	function changeVisibleNode(nodeId)
+	{
+	    var dirLight = document.getElementById("switcher");
+
+	    dirLight.setAttribute("whichChoice", nodeId);
+	    
+	    if(nodeId == -1)
+	    	document.getElementById("visNode").innerHTML = "No node visible!";
+	    else
+	    	document.getElementById("visNode").innerHTML = "Showing node # "+nodeId;
+	}
+
+
+
+
+
+	
+	var solid = true;
+	
+	function toggleRendering()
+	{
+		
+		console.log("color button pressed")
+		var button = document.getElementById("color");
+		
+		solid = !solid;
+		
+		if (solid) {
+			button.value = "Blue";
+		console.log("blue")
+
+		} else {
+			button.value = "Red";
+		console.log("Red")
+		}
+		var mat = document.getElementById("myColourChangeBox");
+
+		
+		mat.setAttribute("diffuseColor", (!solid ? "0 0 1" : "1 0 0"));
+		
+		return false;
+	}
+	
+
+
+
+        </script>
+
+
+
+
+
+</head>
+
+<body>
+
+<div class="container-fluid" id="headingRow">
+<div class="row">
+<div class="col-sm-12">
+<h1>Object picking example</h1>
+</div>
+</div>
+<div class="row">
+<div class="col-sm-12">
+<p>created by Tony Nolan (with support by Josh Parry, Peter Phillips, Steve Curran)</p>
+</div>
+</div>
+</div>
+<div class="container-fluid" id="mainContentRow">
+<div class="row" >
+	<div class="col-sm-8" id="x3dContainer">
+<X3D  id="x3dSpace" showStat="false" showLog="false" x="0px" y="0px" height="700">
+    <Scene>
+         <Viewpoint position="0 0 5" orientation="0 0 0 0"></Viewpoint>
+        <Group onclick="handleGroupClick(event)">
+
+<transform scaleorientation="0,0,0,0" center="0,0,0" bboxsize="-1,-1,-1" bboxcenter="0,0,0" render="true" scale=".1 .1 .1" rotation="0,0,0,0" translation=" 0.238095238095238, 8.7878787878787903E-2, 0.75" id="obj1">
+<shape DEF="2060"   DEF1="2011        " DEF2="BALLS HEAD / BERRYS BAY / BLUES POINT / PLATYPUS / HMAS WATERHEN / LAVENDER BAY / MCMAHONS POINT / WAVERTON"  kpi1="12266"   kpi2="1120"    kpi3="981"    kpi4="1206"
+ bboxsize="-1,-1,-1" bboxcenter="0,0,0" render="true" id="obj_2_shp">
+<appearance>
+        <material diffuseColor='red'></material>  
+      </appearance>
+        <sphere></sphere> 
+      </shape>
+    </transform> 
+
+
+  <Transform scaleOrientation="0,0,0,0" center="0,0,0" bboxsize="-1,-1,-1" bboxcenter="0,0,0" render="true" scale="1 1 1" rotation="0,0,0,0" translation="0 2 -2" id="obj_0">
+      <Shape bboxsize="-1,-1,-1" bboxcenter="0,0,0" render="true" id="obj_0_shp">
+        <Appearance alphaclipthreshold="0.1" id="obj_0_app">
+          <Material transparency="0" shininess=".2" ambientIntensity=".2" specularColor="0 0 0" emissiveColor="0 0 0" diffuseColor=".8 .8 .8" id="obj_0_mat"/>
+        </Appearance>
+       <Circle2D ccw='true' lit='true' metadata='X3DMetadataObject' radius='1' solid='true' useGeoCache='true' ></Circle2D> 
+      </Shape>
+    </Transform>
+
+<Transform scaleOrientation="0,0,0,0" scale="1,1,1" rotation="0,0,0,0" translation="0,0,0" center="0,0,0" bboxsize="-1,-1,-1" bboxcenter="0,0,0" render="true" id="obj_0">
+      <Shape bboxsize="-1,-1,-1" bboxcenter="0,0,0" render="true" id="obj_0_shp">
+        <IndexedLineSet colorPerVertex="true" lit="true" ccw="true" solid="true" colorIndex="0 1" coordIndex="0 1" id="obj_0_line">
+          <Coordinate point="0 2 -1,0 2 -2" id="obj_0_coor"/>
+          <Color color="0 0 0,0 0 0" id="obj_0_color"/>
+        </IndexedLineSet>
+      </Shape>
+    </Transform>
+    
+
+
+<Transform scaleOrientation="0,0,0,0" center="0,0,0" bboxsize="-1,-1,-1" bboxcenter="0,0,0" render="true" scale="1 1 1" rotation="0 -1 0 3.1416" translation="-3 0 0" id="obj_6">
+      <Shape bboxsize="-1,-1,-1" bboxcenter="0,0,0" render="true" id="obj_6_shp">
+        <Appearance alphaclipthreshold="0.1" id="obj_6_app">
+          <Material transparency="0" shininess=".2" ambientIntensity=".2" specularColor="0 0 0" emissiveColor="0 0 0" diffuseColor=".8 .8 .8" id="obj_6_mat"/>
+        </Appearance>
+        <Sphere subdivision="24,24" lit="true" ccw="true" solid="true" usegeocache="false" radius="0.5" id="obj_6_sphere"/>
+      </Shape>
+    </Transform>
+    <Transform scaleOrientation="0,0,0,0" center="0,0,0" bboxsize="-1,-1,-1" bboxcenter="0,0,0" render="true" scale="1 1 1" rotation="0 -1 0 3.1416" translation="-3 0 0" id="obj_5">
+      <Shape bboxsize="-1,-1,-1" bboxcenter="0,0,0" render="true" id="obj_5_shp">
+        <Appearance alphaclipthreshold="0.1" id="obj_5_app">
+          <Material transparency="0" shininess=".2" ambientIntensity=".2" specularColor="0 0 0" emissiveColor="0 0 0" diffuseColor=".8 .8 .8" id="obj_5_mat"/>
+        </Appearance>
+        <Circle2D subdivision="32" radius="1" lit="true" ccw="true" solid="true" usegeocache="false" id="obj_5_circle"/>
+      </Shape>
+    </Transform>
+    <Transform scaleOrientation="0,0,0,0" center="0,0,0" bboxsize="-1,-1,-1" bboxcenter="0,0,0" render="true" scale="1 1 1" rotation="0 -1 0 1.5708" translation="-3 0 0" id="obj_4">
+      <Shape bboxsize="-1,-1,-1" bboxcenter="0,0,0" render="true" id="obj_4_shp">
+        <Appearance alphaclipthreshold="0.1" id="obj_4_app">
+          <Material transparency="0" shininess=".2" ambientIntensity=".2" specularColor="0 0 0" emissiveColor="0 0 0" diffuseColor=".8 .8 .8" id="obj_4_mat"/>
+        </Appearance>
+        <Circle2D subdivision="32" radius="1" lit="true" ccw="true" solid="true" usegeocache="false" id="obj_4_circle"/>
+      </Shape>
+    </Transform>
+    <Transform scaleOrientation="0,0,0,0" scale="1,1,1" rotation="0,0,0,0" translation="0,0,0" center="0,0,0" bboxsize="-1,-1,-1" bboxcenter="0,0,0" render="true" id="obj_3">
+      <Shape bboxsize="-1,-1,-1" bboxcenter="0,0,0" render="true" id="obj_3_shp">
+        <IndexedLineSet colorPerVertex="true" lit="true" ccw="true" solid="true" colorIndex="0 1 2 3" coordIndex="0 1 2 3" id="obj_3_line">
+          <Coordinate point="0 0 0,-1 0 0,-2 0 0,-3 0 0" id="obj_3_coor"/>
+          <Color color="0 0 0,0 0 0,0 0 0,0 0 0" id="obj_3_color"/>
+        </IndexedLineSet>
+      </Shape>
+    </Transform>
+    <Transform scaleOrientation="0,0,0,0" center="0,0,0" bboxsize="-1,-1,-1" bboxcenter="0,0,0" render="true" scale="1 1 1" rotation="0 -1 0 1.5708" translation="0 0 0" id="obj_2">
+      <Shape bboxsize="-1,-1,-1" bboxcenter="0,0,0" render="true" id="obj_2_shp">
+        <Appearance alphaclipthreshold="0.1" id="obj_2_app">
+          <Material transparency="0" shininess=".2" ambientIntensity=".2" specularColor="0 0 0" emissiveColor="0 0 0" diffuseColor=".8 .8 .8" id="obj_2_mat"/>
+        </Appearance>
+        <Sphere subdivision="24,24" lit="true" ccw="true" solid="true" usegeocache="false" radius="0.5" id="obj_2_sphere"/>
+      </Shape>
+    </Transform>
+    <Transform scaleOrientation="0,0,0,0" center="0,0,0" bboxsize="-1,-1,-1" bboxcenter="0,0,0" render="true" scale="1 1 1" rotation="0 -1 0 1.5708" translation="0 0 0" id="obj_1">
+      <Shape bboxsize="-1,-1,-1" bboxcenter="0,0,0" render="true" id="obj_1_shp">
+        <Appearance alphaclipthreshold="0.1" id="obj_1_app">
+          <Material transparency="0" shininess=".2" ambientIntensity=".2" specularColor="0 0 0" emissiveColor="0 0 0" diffuseColor=".8 .8 .8" id="obj_1_mat"/>
+        </Appearance>
+        <Circle2D subdivision="32" radius="1" lit="true" ccw="true" solid="true" usegeocache="false" id="obj_1_circle"/>
+      </Shape>
+    </Transform>
+    <Transform scaleOrientation="0,0,0,0" center="0,0,0" bboxsize="-1,-1,-1" bboxcenter="0,0,0" render="true" scale="1 1 1" rotation="0 0 1 0" translation="0 0 0" id="obj_0">
+      <Shape bboxsize="-1,-1,-1" bboxcenter="0,0,0" render="true" id="obj_0_shp">
+        <Appearance alphaclipthreshold="0.1" id="obj_0_app">
+          <Material transparency="0" shininess=".2" ambientIntensity=".2" specularColor="0 0 0" emissiveColor="0 0 0" diffuseColor=".8 .8 .8" id="obj_0_mat"/>
+        </Appearance>
+        <Circle2D subdivision="32" radius="1" lit="true" ccw="true" solid="true" usegeocache="false" id="obj_0_circle"/>
+      </Shape>
+    </Transform>
+
+<Shape>
+<Appearance>
+<Material emissiveColor='0 0 1'/>
+</Appearance>
+<!-- If there is more than one polyline, then include more than one value in vertexCount array. -->
+<LineSet vertexCount='19' containerField='geometry'>
+<!-- Note that vertextCount says to use 19 points for this polyline. Thus only one line segment is produced. -->
+<!-- the values for the first and last points are the same (coincident) in order to close the loop. -->
+<!-- Compare to indexing scheme in IndexedLineSet.x3d example, which creates the exact same path. -->
+<Coordinate point='0.0 -7.0 -1.0 -1.75 -7.0 -0.5 -4.0 -7.0 0.5 -5.0 -6.5 1.5 -5.5 -6.25 0.75 -5.25 -5.5 -2.25 -4.25 -5.0 -3.25 -2.75 -4.5 -3.75 -1.5 -4.5 -4.0 -0.5 -4.25 -4.5 1.5 -3.75 -4.75 3.0 -3.75 -4.5 5.75 -4.5 -4.5 8.75 -4.5 -4.0 9.25 -4.5 -2.25 7.5 -5.5 0.0 4.0 -6.5 -0.25 2.25 -7.0 -0.25 0.0 -7.0 -1.0'/>
+</IndexedLineSet>
+</Shape> 
+
+
+
+	   <Switch whichChoice="0" id="switcher">
+	        <transform DEF="ball" translation='-2 1 1'>
+	        <shape>
+	            <appearance>
+	                <material diffuseColor='1 0 0'></material>
+	            </appearance>
+	            <sphere></sphere>
+	        </shape>
+	        </transform>
+	   
+<transform DEF="ball2" translation='1 1 1' id="ball1">
+	        <shape>
+	            <appearance>
+	                <material diffuseColor='0 1 1'></material>
+	            </appearance>
+	            <sphere></sphere>
+	        </shape>
+	        </transform>
+	      
+ 
+	        <transform DEF="ball2" translation='2 1 1' id="ball12">
+	        <shape>
+	            <appearance>
+	                <material diffuseColor='0 0 1'></material>
+	            </appearance>
+	            <sphere></sphere>
+	        </shape>
+	        </transform>
+		</Switch>
+
+<transform translation='2 0 0' >
+     <Shape>
+
+                <Appearance>
+                    <Material id="myColourChangeBox" diffuseColor='1 0 0.5' />	
+                </Appearance>
+                <Box DEF='box'/>
+             </Shape>
+	
+
+
+
+    
+    
+    
+        </Scene>
+</X3D>
+</div>
+<div class="col-sm-4">
+<div class="row" id="instructions">
+<div class="col-sm-12">
+<h6>Instructions</h6>
+<p>Click on any shape to get the id and the coordinates of the hitting point.</p>
+</div>
+</div>
+<div class="row" id="nodeSlider">
+	<div class="col-sm-6"><b>Visible node</b></div>
+	<div class="col-sm-1">-1</div>
+    	<div class="col-sm-4">
+<input type="range" id="sliderShadowIntesity" min="-1" max="1" step="1" value="0" onchange="changeVisibleNode(this.value)"/>
+	</div>
+	<div class="col-sm-1">1</div>
+</div>
+<div class="row" id="colorButton">
+
+<div class="col-sm-6"><b>Dynamic material update</b></div>
+<div class="col-sm-6"><input type="button" class="btn btn-default" id="color" value="Red" onclick="toggleRendering();" /></div>
+
+</div>
+
+
+
+
+    <h3>Last clicked object:</h3> 
+
+
+    <label for="id_description_line1">Postcode</label><div id="id_description_line1">-</div>
+    <label for="id_description_line2">Year<div id="id_description_line2">-</div>
+    <label for="id_description_line3">Suburb<div id="id_description_line3">-</div>
+    <br/>
+    
+    <h3>Click coordinates:</h3>
+    <table style="font-size:1em;">
+        <tr><td>x: </td><td id="coordX">-</td></tr>
+        <tr><td>y: </td><td id="coordY">-</td></tr>
+        <tr><td>z: </td><td id="coordZ">-</td></tr>
+    </table>
+
+        <br/>
+  
+        <h3>KPIs</h3>
+        <table style="font-size:1em;">
+             <tr><td>Population: </td><td id="id_table2_kpi1">-</td></tr>
+             <tr><td>Advantage & Disadvantage: </td><td id="id_table2_kpi2">-</td></tr>
+             <tr><td>Economic: </td><td id="id_table2_kpi3">-</td></tr> 
+             <tr><td>Educ & Occ: </td><td id="id_table2_kpi4">-</td></tr>
+        </table>
+</div>
+
+
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+
+$('#x3dSpace').attr('width', $("#x3dContainer").width());
+
+
+
+</script>
+
+
+</body>
+</html>
